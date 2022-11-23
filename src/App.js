@@ -4,9 +4,8 @@ import { Header } from './Components/Header';
 import './App.css';
 import { HomePage } from './Pages/HomePage';
 import { CoinPage } from './Pages/CoinPage';
-import {store} from './store/store';
-import {Provider} from 'react-redux'
 import { Exchanges } from './Pages/Exchanges';
+import React from 'react'
 
 function App() {
   const App = styled('div')({
@@ -17,16 +16,14 @@ function App() {
   )
   return (
     <BrowserRouter>
-    <Provider store={store}>
-        <App>
-          <Header/>
-          <Routes>
-            <Route path='/' element={<HomePage/>}/>
-            <Route path='/coins/:id' element={<CoinPage/>}/>
-            <Route path='exchanges' element={<Exchanges/>}/>
-          </Routes>
-        </App>
-      </Provider>
+      <App>
+        <Header/>
+        <Routes>
+          <Route path='/' element={<HomePage/>}/>
+          <Route path='/coins/:id' element={<CoinPage/>}/>
+          <Route path='exchanges' element={<Exchanges/>}/>
+        </Routes>
+      </App>
     </BrowserRouter>
     
   );

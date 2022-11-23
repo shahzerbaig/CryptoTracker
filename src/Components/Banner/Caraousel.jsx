@@ -13,7 +13,7 @@ const CaraouselCss = css({
     alignItems:"center"
 })
 export function numberWithCommas(x){
-    return x.toString().replace(/B(?=(\d{3})+(?!\d))/g)
+    return x.toString().replace(/B(?=(\d{3})+(?!\d))/g,",")
 }
 export const Caraousel = () => {
     const [trending, setTrending] = useState([])
@@ -30,7 +30,7 @@ export const Caraousel = () => {
     const items = trending.map((coin) =>{
         let profit = coin.price_change_24h >= 0;
         return(
-            <Link 
+            <Link key={coin.name}
                 className={CaraouselCss}
                 to={`/coins/${coin.id}`}>
             <div style={{display:'flex',
@@ -44,7 +44,9 @@ export const Caraousel = () => {
                     alt={coin?.name}
                     height="80"
                     style={{marginBottom:10}}/>
-                <span>
+                <span style={{'&:hover':{
+                    textDecoration:"none"
+                }}}>
                     {coin?.symbol}
                     &nbsp;
                     <span style={{color: profit > 0?"rgb(14,203,129)":"red"}}>
