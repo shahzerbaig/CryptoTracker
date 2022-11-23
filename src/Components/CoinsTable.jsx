@@ -8,7 +8,8 @@ import { Box, Container,
         TableHead, 
         Typography,
         LinearProgress, 
-        Paper} from '@mui/material';
+        Paper,
+        Pagination} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import axios from 'axios';
 import React,{useState, useContext, useEffect} from 'react'
@@ -17,8 +18,10 @@ import {Crypto} from '../contextApi/CryptoContext';
 import { css } from '@emotion/css';
 import { useNavigate } from 'react-router';
 import { numberWithCommas } from './Banner/Caraousel';
+import { ClassNames } from '@emotion/react';
 
 const CoinsTable = () => {
+   
     const history = useNavigate();
     // Context data
     const {currency ,symbol} = useContext(Crypto);
@@ -26,8 +29,8 @@ const CoinsTable = () => {
     // Components Internal State
     const [coins,setCoins] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [search, setSearch] = useState("")
-
+    const [search, setSearch] = useState("");
+    const [page,setPage] = useState(1);
     //Search Functions
     function onSearchChange(event){
         event.preventDefault();
@@ -45,6 +48,7 @@ const CoinsTable = () => {
         setCoins(data)
         setLoading(false)              
     }
+
     console.log(coins);
     useEffect(() => {
         fetchCoins()
@@ -71,6 +75,7 @@ const CoinsTable = () => {
         font-family:Montserrat
 
     `;
+
     return (
         <ThemeProvider theme={darkTheme}>
             <Container style={{
@@ -100,7 +105,7 @@ const CoinsTable = () => {
                     
             </TextField>    
   
-            <Box>
+            
                 <TableContainer component={Paper}>
                     {loading? 
                         <LinearProgress style={{backgroundColor:"gold"}} />: 
@@ -124,7 +129,7 @@ const CoinsTable = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody >
-                                    {handleSearch().map((row)=>{
+                                    {handleSearch().slice((page-1)*10,(page-1)*10+10).map((row)=>{
                                          const profit = row.price_change_24h > 0;
                                         return (
                                             <TableRow
@@ -146,7 +151,7 @@ const CoinsTable = () => {
                                                         <span style={{color:"darkgrey"}}>{row.name}</span>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell style={{color:"white",textAlign:"center"}}>{symbol} {numberWithCommas(row.price_change_24h.toFixed(2))}</TableCell>
+                                                <TableCell style={{color:"white",textAlign:"center"}}>{symbol} {numberWithCommas(row.current_price.toFixed(2))}</TableCell>
                                                 <TableCell 
                                                     align='right'
                                                     style={{
@@ -177,8 +182,20 @@ const CoinsTable = () => {
                             </Table>   }
                     
                 </TableContainer>   
-            </Box>        
-            
+                    
+                <Pagination
+                    style={{
+                        padding:20,
+                        width:"100%",
+                        display:"flex",
+                        justifyContent:"center"
+                    }}
+                    onChange={(_,value)=>{
+                        console.log(value);
+                        setPage(value);
+                        window.scroll(0,450);
+                    }}
+                    count={parseInt((handleSearch()?.length/10)?.toFixed(0))}/>
             </Container>
         </ThemeProvider>
     )
