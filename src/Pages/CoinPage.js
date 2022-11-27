@@ -38,10 +38,11 @@ export const CoinPage = () => {
     `;
    console.log(container);
    const sideBar = css`
+    width:30vw;
     display:flex;
     flex-direction:column;
-    alignItem:center;
-    marging-top:25;
+    align-items:center;
+    margin-top:25;
     border-right:2px solid grey;
 
    `;
@@ -124,7 +125,10 @@ export const CoinPage = () => {
                 </div>
             </div>
             {/* chart */}
+            <div style={{width:"90%",height:"100%"}}>
             <CoinInfo coin={coin}/>
+            </div>
+            
         </div>
     )
 }
